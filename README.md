@@ -49,5 +49,3 @@ MAC Spoofer is a Python script designed to display network information, spoof MA
 4. Follow the on-screen instructions to interact with the tool.
 
 ---
-
-Feel free to customize the README file further with additional sections or information specific to your project.
