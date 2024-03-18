@@ -170,11 +170,17 @@ def get_mac_addresses():
 def spoof_mac_address(interface, new_mac):
     # Spoofs the MAC address of the specified network interface.
     try:
+        print(GREEN + f"Running command: sudo ifconfig {interface} down" + RESET)
         subprocess.call(["sudo", "ifconfig", interface, "down"])
+        
+        print(GREEN + f"Running command: sudo ifconfig {interface} hw ether {new_mac}" + RESET)
         subprocess.call(["sudo", "ifconfig", interface, "hw", "ether", new_mac])
+        
+        print(GREEN + f"Running command: sudo ifconfig {interface} up" + RESET)
         subprocess.call(["sudo", "ifconfig", interface, "up"])
     except Exception as e:
-        print(f"{RED}Error: {e}")
+        print(f"{RED}Error: {e}" + RESET)
+
 
 def get_local_mac_addresses():
     # Retrieves MAC addresses of local network devices using arp-scan.
@@ -223,14 +229,19 @@ def get_current_mac(interface):
     except subprocess.CalledProcessError as e:
         print(f"{RED}Error getting current MAC address: {e}")
 
-def reset_mac_address(interface, original_mac):
+def reset_mac_address(interface, new_mac):
     # Resets the MAC address of the specified network interface to the original.
     try:
+        print(GREEN + f"Running command: sudo ifconfig {interface} down" + RESET)
         subprocess.call(["sudo", "ifconfig", interface, "down"])
-        subprocess.call(["sudo", "ifconfig", interface, "hw", "ether", original_mac])
+        
+        print(GREEN + f"Running command: sudo ifconfig {interface} hw ether {new_mac}" + RESET)
+        subprocess.call(["sudo", "ifconfig", interface, "hw", "ether", new_mac])
+        
+        print(GREEN + f"Running command: sudo ifconfig {interface} up" + RESET)
         subprocess.call(["sudo", "ifconfig", interface, "up"])
     except Exception as e:
-        print(f"{RED}Error: {e}")
+        print(f"{RED}Error: {e}" + RESET)
 
 def display_network_info():
     print(GREEN + "-" * 50)
@@ -261,6 +272,30 @@ def main_menu():
     print(GREEN + "- 3: Reset MAC Address")
     print(GREEN + "- 4: Exit (MAC Address will be reset to original before exiting)")
     return input(GREEN + "Enter your choice (0-4): " + RESET)
+    
+def select_network_interface():
+    interfaces = psutil.net_if_addrs()
+    print(GREEN + "-" * 50)
+    print(GREEN + "Available Network Interfaces:")
+    i = 1
+    interface_list = []
+    for interface in interfaces:
+        interface_list.append(interface)
+        print(f"{i}: {interface}")
+        i += 1
+    print(GREEN + "-" * 50)
+    selection = input(GREEN + "Enter the number corresponding to the interface you want to spoof: " + RESET)
+    try:
+        interface_index = int(selection) - 1
+        if interface_index >= 0 and interface_index < len(interface_list):
+            return interface_list[interface_index]
+        else:
+            print(f"{RED}Invalid selection. Please enter a number within the range.{RESET}")
+            return select_network_interface()
+    except ValueError:
+        print(f"{RED}Invalid input. Please enter a number.{RESET}")
+        return select_network_interface()
+        
 
 if __name__ == "__main__":
     try:
@@ -284,6 +319,8 @@ if __name__ == "__main__":
         Possible_MAC_Addresses.append(("Random Address", generate_random_mac()))
         
         print(GREEN + "MAC Addresses fetched successfully!!!" + RESET)
+        
+        selected_interface = select_network_interface()
 
         while True:
             user_choice = main_menu()
@@ -293,11 +330,11 @@ if __name__ == "__main__":
             elif user_choice == "2":
                 print_addresses()
                 opt = int(input(GREEN + "Please select the MAC address to spoof (Enter Number): " + RESET))
-                spoof_mac_address(originalMAC[0][0], Possible_MAC_Addresses[opt - 1][1])
+                spoof_mac_address(selected_interface, Possible_MAC_Addresses[opt - 1][1])
             elif user_choice == "3":
-                reset_mac_address(originalMAC[0][0], originalMAC[0][1])
+                reset_mac_address(selected_interface, originalMAC[0][1])
             elif user_choice == "4":
-                reset_mac_address(originalMAC[0][0], originalMAC[0][1])
+                reset_mac_address(selected_interface, originalMAC[0][1])
                 print(GREEN + "Thank you for using MAC Spoofer!!!" + RESET)
                 break
             else:
