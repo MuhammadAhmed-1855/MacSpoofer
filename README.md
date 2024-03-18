@@ -24,8 +24,6 @@ MAC Spoofer is a Python script designed to display network information, spoof MA
 - ARP packet sniffing for MAC address detection.
 - Ability to read MAC addresses from a CSV file.
 
-## Screenshots
-
 ### Terminal Interface
 
  - Uses Terminal GUI
@@ -36,16 +34,20 @@ MAC Spoofer is a Python script designed to display network information, spoof MA
 
 ## Dependencies
 
-- [scapy](https://scapy.net/): Packet manipulation library.
-- [psutil](https://pypi.org/project/psutil/): System information retrieval library.
-- Python `subprocess` module: For executing system commands.
-- Python `csv` module: For reading MAC addresses from a file.
-
+- For Linux:
+  - [scapy](https://scapy.net/): Packet manipulation library.
+  - [psutil](https://pypi.org/project/psutil/): System information retrieval library.
+  - `subprocess` module (Python standard library): For executing system commands.
+  - `csv` module (Python standard library): For reading MAC addresses from a file.
+- For Windows:
+  - Equivalent tools for network interface manipulation: Use `netsh` command.
+  - Equivalent tools for viewing ARP cache: Use `arp` command.
+  - Note: Windows does not have a direct equivalent of `sudo`. Run the script with elevated privileges (Run as Administrator) if required.
 ## Usage
 
 1. Clone the repository to your local machine.
 2. Ensure you have the required dependencies installed.
-3. Execute the `mac_spoofer.py` script using Python.
+3. Execute the script using Python.
 4. Follow the on-screen instructions to interact with the tool.
 
 ---
