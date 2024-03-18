@@ -43,11 +43,13 @@ MAC Spoofer is a Python script designed to display network information, spoof MA
   - Equivalent tools for network interface manipulation: Use `netsh` command.
   - Equivalent tools for viewing ARP cache: Use `arp` command.
   - Note: Windows does not have a direct equivalent of `sudo`. Run the script with elevated privileges (Run as Administrator) if required.
+ 
 ## Usage
 
 1. Clone the repository to your local machine.
 2. Ensure you have the required dependencies installed.
-3. Execute the script using Python.
-4. Follow the on-screen instructions to interact with the tool.
+3. If on Windows, update the CSV file and replace all `:` with `-`.
+4. Execute the script using Python.
+5. Follow the on-screen instructions to interact with the tool.
 
 ---
